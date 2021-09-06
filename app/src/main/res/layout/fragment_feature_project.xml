@@ -1,0 +1,678 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@android:id/closeButton"
+            style="@style/ButtonTextOnly"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/AuthTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Featured Token Form"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <LinearLayout
+            android:id="@+id/constraintLayout11"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linearLayout0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Token Name" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTokenName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: Exzocoin2.0"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Token Symbol" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTokenSymbol"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: Ethereum Mainnet"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Decimal Units(Typically 9-18)" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editDecimal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:hint="8" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Token Network(BSC or ETH)" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTokenNetwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: Ethereum Mainnet" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/auth_website" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editWebsite"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Your website"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/auth_whitepaper" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editWhitepaper"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://yourwebsite.io"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Description" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:lines="5"
+                    android:hint="Provide a brief project description and any information about the development team."
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Url to token logo (32x32 or 200x200)" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTokenLogo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://certik.io"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email for Correspondence *" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://certik.io"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Developers Telegram Handle *" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTelegramDev"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: @exzo_dev"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Security Audit URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editSecurityAudit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Your Instagram"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout11"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Telegram URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTelegram"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: t.me/exzocoin"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout12"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Project Twitter URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTwitter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://twitter.com/exzocoin"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout13"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Project Facebook URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editFacebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://facebook.com/exzocoin"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout14"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout13">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Project Instagram URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editInstagram"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://instagram.com/exzocoin"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout15"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout14">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Project Linkedin URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editLinkedin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://linkedin.com/788282/exzocoin"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout16"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout15">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CoinMarketCap URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editCoinmarketcap"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://coinmarketcap.com/currencies/exzocoin2.0"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout17"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CoinGecko URL" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editCoinGecko"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://coingecko.com/en/coins/exzocoin-2"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout18"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout17">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Amount of time to be featured? *" />
+
+                <RadioGroup
+                    android:id="@+id/subscriptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <RadioButton
+                        android:id="@+id/radioButton1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1 Day ($2,000)" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="7 Days ($6,500) + Banner Ads Included" />
+
+                    <RadioButton
+                        android:id="@+id/radioButton3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="14 Days ($13,000) + Banner Ads and
+                            announcement on all social media channels
+                            and Telegram included." />
+
+                    <RadioButton
+                        android:id="@+id/radioButton4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="30 Days ($30,000) + Banner Ads and
+                            announcement on all social media channels
+                            and Telegram included." />
+
+                    <RadioButton
+                        android:id="@+id/radioButton5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1 Year ($250,000) + Banner Ads and
+                        announcement on all social media channels
+                        and Telegram included." />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Information (Ethereum or Smart Chain BNB) *" />
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="* Please ensure you send the proper amount of Ethereum or BNB to the correct wallet address we are not responsible for losses if you send it to the wrong address. The total cost is $5,000." />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout19"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout18">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ethereum/ Smart Chain BNB Wallet Address" />
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0xE8E98a435576D94870739B0de03236182d1cbD34" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout20"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout19">
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Transaction (TXN) URL *" />
+
+                <io.exzocoin.wallet.ui.extensions.InputView
+                    android:id="@+id/editTx"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Ex: https://bscscan.com/....."
+                    android:inputType="text" />
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Etherscan url for Ethereum Payments and BSCscan url for Smart Chain BNB Payments." />
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Terms of Service &amp; Acknowledgements *" />
+
+                <TextView
+                    style="@style/AuthTextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="You acknowledge that Exzo LLC. is not liable for any rug pulls, scams malicious activity, allegations, or harmful activity from my project, team, or within my community. The owner of the project and/or utility token accept full legal responsibility for these actions and cannot claim otherwise towards Exzo LLC. and it’s other entities. Exzo LLC. retains all rights to remove projects and ban them from the platform as they deem fit or if a developer, project, or members within their community
+                        conduct malicious activities or violations of Exzo LLC’s. rules and/or regultions. Exzo LLC. and it’s affiliates are not responsible for any unlawful activities or for determining whether the projects actions are within legal jurisdiction for the country of origin. You acknowledge that Exzo LLC. witholds the right to remove any project at will and will not provide a refund for any payments paid or from termination of service. You also verify your token/coin is a utility token and not a security or investment in an entity or has the expectations of profits and Exzo LLC. has no liability and is not responsible if proven otherwise." />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout100"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+                <CheckBox
+                    android:id="@+id/chkSubmit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:theme="@style/checkBoxStyle" />
+
+                <TextView
+                    android:id="@+id/textIAgree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:text="I acknowledge I have read these terms and Accept."
+                    android:textColorLink="@color/primary_blue" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="18dp"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout100">
+            <TextView
+                android:id="@+id/submitResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Register Failed...."
+                android:textColor="@color/red_l"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/submitSuccess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Submitted successfully"
+                android:textColor="@color/green_d"
+                android:textSize="14sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout100"
+                android:gravity="center_vertical|center_horizontal|center"
+                >
+                <Button
+                    android:id="@+id/btnSubmit"
+                    style="@style/ButtonPrimaryBlue"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

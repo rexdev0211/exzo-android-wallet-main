@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="delegatedBuild" value="true" />
+        <option name="testRunner" value="GRADLE" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/coinkit" />
+            <option value="$PROJECT_DIR$/components" />
+            <option value="$PROJECT_DIR$/components/chartview" />
+            <option value="$PROJECT_DIR$/components/icons" />
+            <option value="$PROJECT_DIR$/components/keystore" />
+            <option value="$PROJECT_DIR$/components/languageswitcher" />
+            <option value="$PROJECT_DIR$/components/pin" />
+            <option value="$PROJECT_DIR$/components/seekbar" />
+            <option value="$PROJECT_DIR$/components/snackbar" />
+            <option value="$PROJECT_DIR$/components/views" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/xrateskit" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

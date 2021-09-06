@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/auth_graph"
+    app:startDestination="@id/authFragment">
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="io.exzocoin.wallet.modules.auth.AuthFragment"
+        android:label="AuthFragment" >
+        <action
+            android:id="@+id/action_authFragment_to_authLoginFragment"
+            app:destination="@id/authLoginFragment" />
+        <action
+            android:id="@+id/action_authFragment_to_authSignupFragment"
+            app:destination="@id/authSignupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authLoginFragment"
+        android:name="io.exzocoin.wallet.modules.auth.login.AuthLoginFragment"
+        android:label="AuthLoginFragment" />
+    <fragment
+        android:id="@+id/authSignupFragment"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupFragment"
+        android:label="AuthSignupFragment" >
+        <action
+            android:id="@+id/action_authSignupFragment_to_authSignupSwapFragment"
+            app:destination="@id/authSignupSwapFragment" />
+        <action
+            android:id="@+id/action_authSignupFragment_to_authSignupCreatorFragment"
+            app:destination="@id/authSignupCreatorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupSwapFragment"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupSwapFragment"
+        android:label="AuthSignupSwapFragment" >
+        <action
+            android:id="@+id/action_authSignupSwapFragment_to_authSignupVerifyEmail"
+            app:destination="@id/authSignupVerifyEmail" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupVerifyEmail"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupVerifyEmail"
+        android:label="AuthSignupVerifyEmail" >
+        <action
+            android:id="@+id/action_authSignupVerifyEmail_to_authSignupSuccessEmail"
+            app:destination="@id/authSignupSuccessEmail" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupSecureAccount"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupSecureAccount"
+        android:label="AuthSignupSecureAccount" >
+        <action
+            android:id="@+id/action_authSignupSecureAccount_to_authSignup2Step"
+            app:destination="@id/authSignup2Step" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupSuccessEmail"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupSuccessEmail"
+        android:label="AuthSignupSuccessEmail" >
+        <action
+            android:id="@+id/action_authSignupSuccessEmail_to_authSignupSecureAccount"
+            app:destination="@id/authSignupSecureAccount" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignup2Step"
+        android:name="io.exzocoin.wallet.modules.auth.signup.twostep.AuthSignup2Step"
+        android:label="AuthSignup2Step" >
+        <action
+            android:id="@+id/action_authSignup2Step_to_authSignupVerifyAccountHome"
+            app:destination="@id/authSignupVerifyAccountHome" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupVerifyAccountHome"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupVerifyAccountHome"
+        android:label="AuthSignupVerifyAccountHome" >
+        <action
+            android:id="@+id/action_authSignupVerifyAccountHome_to_authSignupVerifyAccountScan"
+            app:destination="@id/authSignupVerifyAccountScan" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupVerifyAccountScan"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupVerifyAccountScan"
+        android:label="AuthSignupVerifyAccountScan" >
+        <action
+            android:id="@+id/action_authSignupVerifyAccountScan_to_authSignupVerifyAccountPhoto"
+            app:destination="@id/authSignupVerifyAccountPhoto" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupVerifyAccountSuccess"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupVerifyAccountSuccess"
+        android:label="AuthSignupVerifyAccountSuccess" />
+    <fragment
+        android:id="@+id/authSignupVerifyAccountPhoto"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupVerifyAccountPhoto"
+        android:label="AuthSignupVerifyAccountPhoto" >
+        <action
+            android:id="@+id/action_authSignupVerifyAccountPhoto_to_authSignupVerifyAccountSuccess"
+            app:destination="@id/authSignupVerifyAccountSuccess" />
+    </fragment>
+    <fragment
+        android:id="@+id/authSignupCreatorFragment"
+        android:name="io.exzocoin.wallet.modules.auth.signup.AuthSignupCreatorFragment"
+        android:label="AuthSignupCreatorFragment" />
+</navigation>

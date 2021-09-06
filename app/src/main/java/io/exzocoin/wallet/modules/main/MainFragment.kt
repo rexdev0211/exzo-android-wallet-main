@@ -1,0 +1,151 @@
+package io.exzocoin.wallet.modules.main
+
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import io.exzocoin.wallet.R
+import io.exzocoin.wallet.core.BaseFragment
+import io.exzocoin.wallet.core.managers.RateAppManager
+import io.exzocoin.wallet.modules.main.MainActivity.Companion.ACTIVE_TAB_KEY
+import io.exzocoin.wallet.modules.markdown.MarkdownFragment
+import io.exzocoin.wallet.modules.rateapp.RateAppDialogFragment
+import io.exzocoin.wallet.modules.rooteddevice.RootedDeviceActivity
+import io.exzocoin.core.findNavController
+import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
+
+class MainFragment : BaseFragment(), RateAppDialogFragment.Listener {
+
+    private val viewModel by viewModels<MainViewModel>{ MainModule.Factory() }
+    private var bottomBadgeView: View? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
+
+        view.viewPager.offscreenPageLimit = 1
+        view.viewPager.adapter = MainViewPagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
+
+        view.viewPager.isUserInputEnabled = false
+
+        view.bottomNavigation.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.navigation_balance -> view.viewPager.setCurrentItem(0, false)
+                R.id.navigation_market -> view.viewPager.setCurrentItem(1, false)
+                R.id.navigation_swap -> view.viewPager.setCurrentItem(2, false)
+                R.id.navigation_transactions -> view.viewPager.setCurrentItem(3, false)
+                R.id.navigation_settings -> view.viewPager.setCurrentItem(4, false)
+            }
+            true
+        }
+
+        arguments?.getInt(ACTIVE_TAB_KEY)?.let { position ->
+            view.bottomNavigation.menu.getItem(position).isChecked = true
+            view.viewPager.setCurrentItem(position, false)
+        }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.showRootedDeviceWarningLiveEvent.observe(viewLifecycleOwner, {
+            startActivity(Intent(activity, RootedDeviceActivity::class.java))
+        })
+
+        viewModel.showRateAppLiveEvent.observe(viewLifecycleOwner, Observer {
+            activity?.let {
+                RateAppDialogFragment.show(it, this)
+            }
+        })
+
+        viewModel.showWhatsNewLiveEvent.observe(viewLifecycleOwner, { gitReleaseUrl ->
+            val arguments = bundleOf(MarkdownFragment.gitReleaseNotesUrlKey to gitReleaseUrl, MarkdownFragment.showAsClosablePopupKey to true)
+            findNavController().navigate(R.id.mainFragment_to_markdownViewer, arguments, navOptionsFromBottom())
+        })
+
+        viewModel.openPlayMarketLiveEvent.observe(viewLifecycleOwner, Observer {
+            openAppInPlayMarket()
+        })
+6
+        viewModel.hideContentLiveData.observe(viewLifecycleOwner, Observer { hide ->
+            screenSecureDim.isVisible = hide
+        })
+
+        viewModel.setBadgeVisibleLiveData.observe(viewLifecycleOwner, Observer { visible ->
+            val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
+            val settingsNavigationViewItem = bottomMenu?.getChildAt(4) as? BottomNavigationItemView
+
+            if (visible) {
+                if (bottomBadgeView?.parent == null) {
+                    settingsNavigationViewItem?.addView(getBottomBadge())
+                }
+            } else {
+                settingsNavigationViewItem?.removeView(bottomBadgeView)
+            }
+        })
+
+        viewModel.transactionTabEnabledLiveData.observe(viewLifecycleOwner, { enabled ->
+            bottomNavigation.menu.getItem(3).isEnabled = enabled
+        })
+
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            if (findNavController().currentDestination?.id == R.id.mainFragment) {
+                when (bottomNavigation.selectedItemId) {
+                    R.id.navigation_market -> activity?.finish()
+                    else -> bottomNavigation.selectedItemId = R.id.navigation_market
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
+    }
+
+    override fun onDestroyView() {
+        viewPager.adapter = null
+        bottomBadgeView = null
+
+        super.onDestroyView()
+    }
+
+    //  RateAppDialogFragment.Listener
+
+    override fun onClickRateApp() {
+        openAppInPlayMarket()
+    }
+
+    private fun openAppInPlayMarket() {
+        context?.let { context ->
+            try {
+                ContextCompat.startActivity(context, RateAppManager.getPlayMarketAppIntent(), null)
+            } catch (e: ActivityNotFoundException) {
+                ContextCompat.startActivity(context, RateAppManager.getPlayMarketSiteIntent(), null)
+            }
+        }
+    }
+
+    private fun getBottomBadge(): View? {
+        if (bottomBadgeView != null) {
+            return bottomBadgeView
+        }
+
+        val bottomMenu = bottomNavigation.getChildAt(0) as? BottomNavigationMenuView
+        bottomBadgeView = LayoutInflater.from(activity).inflate(R.layout.view_bottom_navigation_badge, bottomMenu, false)
+
+        return bottomBadgeView
+    }
+}

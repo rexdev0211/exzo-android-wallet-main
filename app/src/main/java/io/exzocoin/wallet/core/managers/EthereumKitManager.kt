@@ -1,0 +1,102 @@
+package io.exzocoin.wallet.core.managers
+
+import io.exzocoin.wallet.core.AdapterErrorWrongParameters
+import io.exzocoin.wallet.core.App
+import io.exzocoin.wallet.core.UnsupportedAccountException
+import io.exzocoin.wallet.entities.Account
+import io.exzocoin.wallet.entities.AccountType
+import io.exzocoin.core.BackgroundManager
+import io.horizontalsystems.erc20kit.core.Erc20Kit
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.EthereumKit.NetworkType
+import io.horizontalsystems.uniswapkit.UniswapKit
+
+class EthereumKitManager(
+        private val infuraProjectId: String,
+        private val infuraSecret: String,
+        private val etherscanApiKey: String,
+        private val testMode: Boolean,
+        private val backgroundManager: BackgroundManager
+) : BackgroundManager.Listener {
+
+    init {
+        backgroundManager.registerListener(this)
+    }
+
+    var evmKit: EthereumKit? = null
+        private set
+    private var useCount = 0
+    private var currentAccount: Account? = null
+
+    val statusInfo: Map<String, Any>?
+        get() = evmKit?.statusInfo()
+
+    val networkType: NetworkType
+        get() = if (testMode) NetworkType.EthRopsten else NetworkType.EthMainNet
+
+    @Synchronized
+    fun evmKit(account: Account): EthereumKit {
+        if (this.evmKit != null && currentAccount != account) {
+            this.evmKit?.stop()
+            this.evmKit = null
+            currentAccount = null
+        }
+
+        if (this.evmKit == null) {
+            if (account.type !is AccountType.Mnemonic)
+                throw UnsupportedAccountException()
+
+            useCount = 0
+
+            this.evmKit = createKitInstance(account.type, account)
+            currentAccount = account
+        }
+
+        useCount++
+        return this.evmKit!!
+    }
+
+    private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): EthereumKit {
+        val networkType = if (testMode) NetworkType.EthRopsten else NetworkType.EthMainNet
+        val syncSource = EthereumKit.infuraWebSocketSyncSource(networkType, infuraProjectId, infuraSecret)
+                ?: throw AdapterErrorWrongParameters("Couldn't get syncSource!")
+        val kit = EthereumKit.getInstance(App.instance, accountType.words, accountType.passphrase, networkType, syncSource, etherscanApiKey, account.id)
+
+        kit.addDecorator(Erc20Kit.getDecorator())
+        kit.addDecorator(UniswapKit.getDecorator())
+
+        kit.addTransactionSyncer(Erc20Kit.getTransactionSyncer(kit))
+
+        kit.start()
+
+        return kit
+    }
+
+    @Synchronized
+    fun unlink(account: Account) {
+        if (account == currentAccount) {
+            useCount -= 1
+
+            if (useCount < 1) {
+                this.evmKit?.stop()
+                this.evmKit = null
+                currentAccount = null
+            }
+        }
+    }
+
+    //
+    // BackgroundManager.Listener
+    //
+
+    override fun willEnterForeground() {
+        super.willEnterForeground()
+        this.evmKit?.onEnterForeground()
+    }
+
+    override fun didEnterBackground() {
+        super.didEnterBackground()
+        this.evmKit?.onEnterBackground()
+    }
+
+}

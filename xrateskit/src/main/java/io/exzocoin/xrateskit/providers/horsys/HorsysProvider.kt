@@ -1,0 +1,112 @@
+package io.exzocoin.xrateskit.providers.horsys
+
+import io.exzocoin.coinkit.models.CoinType
+import io.exzocoin.xrateskit.coins.ProviderCoinsManager
+import io.exzocoin.xrateskit.core.IDefiMarketsProvider
+import io.exzocoin.xrateskit.core.IGlobalCoinMarketProvider
+import io.exzocoin.xrateskit.entities.*
+import io.exzocoin.xrateskit.providers.InfoProvider
+import io.exzocoin.xrateskit.utils.RetrofitUtils
+import io.reactivex.Single
+import java.math.BigDecimal
+import java.util.*
+
+class HorsysProvider(
+    private val providerCoinsManager: ProviderCoinsManager
+) : IGlobalCoinMarketProvider, IDefiMarketsProvider {
+
+    override val provider: InfoProvider = InfoProvider.HorSys()
+
+    private val horsysService: HorsysService by lazy {
+        RetrofitUtils.build(provider.baseUrl).create(HorsysService::class.java)
+    }
+
+    override fun initProvider() {}
+
+    override fun destroy() {}
+
+    private fun getCoinType(providerCoinId: String, provider: InfoProvider): CoinType? {
+        return providerCoinsManager.getCoinTypes(providerCoinId.toLowerCase(Locale.ENGLISH), provider).firstOrNull()
+    }
+
+    override fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>> {
+        if(!isTimePeriodSupported(timePeriod))
+            return Single.error(Exception("Unsupported input parameter: $timePeriod"))
+
+        return horsysService.globalCoinMarketPoints(timePeriod.title, currencyCode).map {
+            val globalMarketPoints = it.map { response ->
+                GlobalCoinMarketPoint(
+                    timestamp = response.timestamp,
+                    volume24h = response.volume24h,
+                    marketCap = response.market_cap,
+                    defiMarketCap = response.market_cap_defi,
+                    btcDominance = response.dominance_btc,
+                    defiTvl = response.tvl
+                )
+            }
+
+            globalMarketPoints
+        }
+    }
+
+    private fun isTimePeriodSupported(timePeriod: TimePeriod): Boolean{
+        return when(timePeriod){
+            TimePeriod.ALL -> false
+            TimePeriod.DAY_START -> false
+            TimePeriod.YEAR_1 -> false
+            TimePeriod.DAY_200 -> false
+            else -> true
+        }
+    }
+
+    override fun getTopDefiTvlAsync(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int): Single<List<DefiTvl>> {
+
+        val period = if(isTimePeriodSupported(fetchDiffPeriod)) fetchDiffPeriod.title else TimePeriod.HOUR_24.title
+
+        return horsysService.defiTvl(currencyCode, period).map { responseList ->
+            val markets = responseList.mapNotNull { item ->
+                item.coingecko_id?.let {
+                    if(item.coingecko_id.isNotEmpty()){
+
+                        val rateDiffPeriod = when (fetchDiffPeriod) {
+                            TimePeriod.HOUR_1 -> item.tvl_diff_1h
+                            TimePeriod.DAY_7 -> item.tvl_diff_7d
+                            TimePeriod.DAY_14 -> item.tvl_diff_14d
+                            TimePeriod.DAY_30 -> item.tvl_diff_30d
+                            else -> item.tvl_diff_24h
+
+                        } ?: BigDecimal.ZERO
+
+                        getCoinType(item.coingecko_id, InfoProvider.CoinGecko())?.let {
+                            DefiTvl(CoinData(it, item.code, item.name), item.tvl, rateDiffPeriod)
+                        }
+                    } else null
+                }
+            }
+            markets.sortedByDescending { it.tvl }
+        }
+    }
+
+    override fun getDefiTvlAsync(coinType: CoinType, currencyCode: String): Single<DefiTvl> {
+
+        providerCoinsManager.getProviderIds(listOf(coinType), InfoProvider.CoinGecko()).firstOrNull()?.let { coinGeckoId ->
+            return horsysService.coinDefiTvl(coinGeckoId, currencyCode).map { response ->
+                DefiTvl(CoinData(coinType, response.code, response.name), response.tvl, BigDecimal.ZERO, response.tvl_rank?:0)
+            }
+        }?: return Single.error(Exception("No CoinGecko CoinId found for $coinType"))
+    }
+
+    override fun getDefiTvlPointsAsync(coinType: CoinType, currencyCode: String, timePeriod: TimePeriod): Single<List<DefiTvlPoint>> {
+
+        if(!isTimePeriodSupported(timePeriod))
+            return Single.error(Exception("Unsupported input parameter: $timePeriod"))
+
+        providerCoinsManager.getProviderIds(listOf(coinType), InfoProvider.CoinGecko()).firstOrNull()?.let { coinGeckoId ->
+            return horsysService.defiTvlPoints(coinGeckoId, timePeriod.title ,currencyCode).map { responseList ->
+                responseList.map { responseItem ->
+                    DefiTvlPoint(responseItem.timestamp, responseItem.tvl)
+                }
+            }
+        }?: return Single.error(Exception("No CoinGecko CoinId found for $coinType"))
+    }
+}

@@ -1,0 +1,119 @@
+package io.exzocoin.wallet.core.managers
+
+import android.content.Context
+import io.exzocoin.wallet.core.IAppConfigProvider
+import io.exzocoin.wallet.core.IRateManager
+import io.exzocoin.coinkit.models.CoinType
+import io.exzocoin.core.ICurrencyManager
+import io.exzocoin.xrateskit.XRatesKit
+import io.exzocoin.xrateskit.entities.*
+import io.reactivex.Observable
+import io.reactivex.Single
+import java.math.BigDecimal
+
+class RateManager(
+        context: Context,
+        private val currencyManager: ICurrencyManager,
+        private val appConfigProvider: IAppConfigProvider) : IRateManager {
+
+    private val kit: XRatesKit by lazy {
+        XRatesKit.create(
+                context,
+                currencyManager.baseCurrency.code,
+                rateExpirationInterval = 60 * 10,
+                cryptoCompareApiKey = appConfigProvider.cryptoCompareApiKey
+        )
+    }
+
+    override fun latestRate(coinType: CoinType, currencyCode: String): LatestRate? {
+        return kit.getLatestRate(coinType, currencyCode)
+    }
+
+    override fun getLatestRate(coinType: CoinType, currencyCode: String): BigDecimal? {
+        val marketInfo = latestRate(coinType, currencyCode)
+
+        return when {
+            marketInfo == null -> null
+            marketInfo.isExpired() -> null
+            else -> marketInfo.rate
+        }
+
+    }
+
+    override fun latestRateObservable(coinType: CoinType, currencyCode: String): Observable<LatestRate> {
+        return kit.getLatestRateAsync(coinType, currencyCode)
+    }
+
+    override fun latestRateObservable(coinTypes: List<CoinType>, currencyCode: String): Observable<Map<CoinType, LatestRate>> {
+        return kit.latestRateMapObservable(coinTypes, currencyCode)
+    }
+
+    override fun historicalRateCached(coinType: CoinType, currencyCode: String, timestamp: Long): BigDecimal? {
+        return kit.getHistoricalRate(coinType, currencyCode, timestamp)
+    }
+
+    override fun historicalRate(coinType: CoinType, currencyCode: String, timestamp: Long): Single<BigDecimal> {
+        return kit.getHistoricalRate(coinType, currencyCode, timestamp)?.let { Single.just(it) }
+                ?: kit.getHistoricalRateAsync(coinType, currencyCode, timestamp)
+    }
+
+    override fun chartInfo(coinType: CoinType, currencyCode: String, chartType: ChartType): ChartInfo? {
+        return kit.getChartInfo(coinType, currencyCode, chartType)
+    }
+
+    override fun chartInfoObservable(coinType: CoinType, currencyCode: String, chartType: ChartType): Observable<ChartInfo> {
+        return kit.chartInfoObservable(coinType, currencyCode, chartType)
+    }
+
+    override fun coinMarketDetailsAsync(coinType: CoinType, currencyCode: String, rateDiffCoinCodes: List<String>, rateDiffPeriods: List<TimePeriod>): Single<CoinMarketDetails> {
+        return kit.getCoinMarketDetailsAsync(coinType, currencyCode, rateDiffCoinCodes, rateDiffPeriods)
+    }
+
+    override fun getTopMarketList(currency: String, itemsCount: Int, diffPeriod: TimePeriod): Single<List<CoinMarket>> {
+        return kit.getTopCoinMarketsAsync(currency, itemsCount = itemsCount, fetchDiffPeriod = diffPeriod)
+    }
+
+    override fun getCoinMarketList(coinTypes: List<CoinType>, currency: String): Single<List<CoinMarket>> {
+        return kit.getCoinMarketsAsync(coinTypes, currency)
+    }
+
+    override fun getCoinMarketListByCategory(categoryId: String, currency: String): Single<List<CoinMarket>>{
+        return kit.getCoinMarketsByCategoryAsync(categoryId, currency)
+    }
+
+    override fun getCoinRatingsAsync(): Single<Map<CoinType, String>> {
+        return kit.getCoinRatingsAsync()
+    }
+
+    override fun getGlobalMarketInfoAsync(currency: String): Single<GlobalCoinMarket> {
+        return kit.getGlobalCoinMarketsAsync(currency)
+    }
+
+    override fun getGlobalCoinMarketPointsAsync(currencyCode: String, timePeriod: TimePeriod): Single<List<GlobalCoinMarketPoint>> {
+        return kit.getGlobalCoinMarketPointsAsync(currencyCode, timePeriod)
+    }
+
+    override fun searchCoins(searchText: String): List<CoinData> {
+        return kit.searchCoins(searchText)
+    }
+
+    override fun getNotificationCoinCode(coinType: CoinType): String? {
+        return kit.getNotificationCoinCode(coinType)
+    }
+
+    override fun topDefiTvl(currencyCode: String, fetchDiffPeriod: TimePeriod, itemsCount: Int) : Single<List<DefiTvl>> {
+        return kit.getTopDefiTvlAsync(currencyCode, fetchDiffPeriod, itemsCount)
+    }
+
+    override fun defiTvlPoints(coinType: CoinType, currencyCode: String, fetchDiffPeriod: TimePeriod) : Single<List<DefiTvlPoint>> {
+        return kit.getDefiTvlPointsAsync(coinType, currencyCode, fetchDiffPeriod)
+    }
+
+    override fun refresh(currencyCode: String) {
+        kit.refresh(currencyCode)
+    }
+
+    override fun getCryptoNews(timestamp: Long?): Single<List<CryptoNews>> {
+        return kit.cryptoNewsAsync(timestamp)
+    }
+}
